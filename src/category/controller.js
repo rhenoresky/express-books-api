@@ -6,6 +6,7 @@ import {
   postCategory,
   updateCategory,
 } from './service.js';
+import {verifyToken} from '../auth/service.js';
 
 const router = express.Router();
 
@@ -15,19 +16,19 @@ router.get('/', async (req, res) => {
   res.json(result);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
   await postCategory(req.body);
 
   res.status(201).json({message: 'add category successfully'});
 });
 
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', verifyToken, async (req, res) => {
   await updateCategory(parseInt(req.params.id), req.body.name);
 
   res.json({message: 'edit category successfully'});
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
   await deleteCategory(parseInt(req.params.id));
 
   res.json({message: 'delete category successfully'});

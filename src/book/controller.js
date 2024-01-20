@@ -1,5 +1,6 @@
 import express from 'express';
 import {getBooks, postBook, updateBook, deleteBook} from './service.js';
+import {verifyToken} from '../auth/service.js';
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -8,7 +9,7 @@ router.get('/', async (req, res) => {
   res.json(result);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
   if (req.body.release_year < 1980 || req.body.release_year > 2021) {
     return res.status(400).json({message: 'wrong release_year'});
   }
@@ -28,7 +29,7 @@ router.post('/', async (req, res) => {
   res.status(201).json({message: 'add book successfully'});
 });
 
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', verifyToken, async (req, res) => {
   if (req.body.release_year < 1980 || req.body.release_year > 2021) {
     return res.status(400).json({message: 'wrong release_year'});
   }
@@ -48,7 +49,7 @@ router.patch('/:id', async (req, res) => {
   res.json({message: 'edit book successfully'});
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
   await deleteBook(parseInt(req.params.id));
 
   res.json({message: 'delete book successfully'});
