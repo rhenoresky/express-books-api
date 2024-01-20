@@ -1,11 +1,62 @@
 import express from 'express';
-import {getBooks, postBook, updateBook, deleteBook} from './service.js';
+import {
+  getBooks,
+  postBook,
+  updateBook,
+  deleteBook,
+  getBookFilters,
+} from './service.js';
 import {verifyToken} from '../auth/service.js';
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const result = await getBooks(req.body);
+  if (Object.keys(req.query).length >= 0) {
+    const {title, minYear, maxYear, minPage, maxPage, sortByTitle} = req.query;
+    const filter = {where: {}};
 
+    if (title) {
+      filter.where.title = {
+        contains: title.toLowerCase(),
+      };
+    }
+
+    if (minYear) {
+      filter.where.release_year = {
+        gte: parseInt(minYear),
+      };
+    }
+
+    if (maxYear) {
+      filter.where.release_year = {
+        ...filter.where.release_year,
+        lte: parseInt(maxYear),
+      };
+    }
+
+    if (minPage) {
+      filter.where.total_page = {
+        gte: parseInt(minPage),
+      };
+    }
+
+    if (maxPage) {
+      filter.where.total_page = {
+        ...filter.where.total_page,
+        lte: parseInt(maxPage),
+      };
+    }
+
+    if (sortByTitle) {
+      filter.orderBy = {
+        title: sortByTitle.toLowerCase() === 'desc' ? 'desc' : 'asc',
+      };
+    }
+
+    const result = await getBookFilters(filter);
+    return res.json(result);
+  }
+
+  const result = await getBooks(req.body);
   res.json(result);
 });
 

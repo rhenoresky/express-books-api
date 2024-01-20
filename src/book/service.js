@@ -6,6 +6,10 @@ const getBooks = () => {
   return prisma.book.findMany();
 };
 
+const getBookFilters = async (filter) => {
+  return await prisma.book.findMany(filter);
+};
+
 const postBook = async (body) => {
   await prisma.book.create({
     data: {
@@ -34,4 +38,4 @@ const deleteBook = async (id) => {
   });
 };
 
-export {getBooks, postBook, updateBook, deleteBook};
+export {getBooks, postBook, updateBook, deleteBook, getBookFilters};

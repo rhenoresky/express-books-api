@@ -42,10 +42,15 @@ const getBooksByCategoryId = async (id) => {
   });
 };
 
+const getBookFiltersByCategoryId = async (filter) => {
+  return await prisma.book.findMany(filter);
+};
+
 export {
   getCategory,
   postCategory,
   updateCategory,
   deleteCategory,
   getBooksByCategoryId,
+  getBookFiltersByCategoryId,
 };
