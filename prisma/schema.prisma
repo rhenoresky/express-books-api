@@ -30,7 +30,7 @@ model Book {
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
   category_id Int
-  category    Category  @relation(fields: [category_id], references: [id])
+  category    Category  @relation(fields: [category_id], references: [id], onDelete: Cascade)
 }
 
 model User {
