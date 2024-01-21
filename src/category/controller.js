@@ -79,11 +79,17 @@ router.get('/:id/books', async (req, res) => {
     }
 
     const result = await getBookFiltersByCategoryId(filter);
-    return res.json(result);
+    const books = result.map((book) => {
+      return {...book, menu: false};
+    });
+    return res.json(books);
   }
 
   const result = await getBooksByCategoryId(parseInt(req.params.id));
-  res.json(result);
+  const books = result.map((book) => {
+    return {...book, menu: false};
+  });
+  return res.json(books);
 });
 
 export default router;

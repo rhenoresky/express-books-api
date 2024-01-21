@@ -53,11 +53,17 @@ router.get('/', async (req, res) => {
     }
 
     const result = await getBookFilters(filter);
-    return res.json(result);
+    const books = result.map((book) => {
+      return {...book, menu: false};
+    });
+    return res.json(books);
   }
 
   const result = await getBooks(req.body);
-  res.json(result);
+  const books = result.map((book) => {
+    return {...book, menu: false};
+  });
+  return res.json(books);
 });
 
 router.post('/', verifyToken, async (req, res) => {

@@ -34,11 +34,9 @@ router.post('/login', async (req, res) => {
     return res.status(401).json({error: 'Invalid credentials'});
   }
 
-  const token = jwt.sign({userId: user.id}, process.env.JWT_KEY, {
-    expiresIn: '1h',
-  });
+  const token = `Bearer ${jwt.sign({userId: user.id}, process.env.JWT_KEY)}`;
 
-  res.status(200).json({message: 'Login successful', token});
+  res.status(200).json({message: 'Login successful', id: user.id, token});
 });
 
 export default router;
